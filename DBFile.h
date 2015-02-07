@@ -18,6 +18,8 @@ private:
 	Page pageObj;
 	File fileObj;
 	int fileType;
+	int currentPage;
+	int pageFetched;
 
 public:
 	DBFile (); 

@@ -15,14 +15,14 @@ extern "C" {
 extern struct AndList *final;
 
 char *dbFile_dir = "DBFiles/temp.file"; // dir where binary heap files should be stored					// SANIL
-char *tpch_dir ="../../Dataset/"; // dir where dbgen tpch files (extension *.tbl) can be found
+char *tpch_dir ="../"; // dir where dbgen tpch files (extension *.tbl) can be found
 char *catalog_path = "catalog"; // full path of the catalog file
 
 
 int main () {
 
 /*	SANIL - Assignment 1 Implementation	*/
-	DBFile dbFileObj;
+	/*DBFile dbFileObj;
 
 	// Load Schema
 	char *table_name = "lineitem.tbl";
@@ -34,13 +34,13 @@ int main () {
 	dbFileObj.Load(mySchema, fileToLoad);
 	
 	// Close the DBFile object
-	int close = dbFileObj.Close();
+	int close = dbFileObj.Close();*/
 
 
-/*	SANIL - Assignment 1 Implementation END
+	//SANIL - Assignment 1 Implementation END
 
 
-/*	SANIL - Commenting code to try out Assignment 1
+//SANIL - Commenting code to try out Assignment 1
 	// try to parse the CNF
 	cout << "Enter in your CNF: ";
   	if (yyparse() != 0) {
@@ -60,7 +60,7 @@ int main () {
 	myComparison.Print ();
 
 	// now open up the text file and start procesing it
-        FILE *tableFile = fopen ("/home/sanil/Documents/DBI/Dataset/lineitem.tbl", "r");
+        FILE *tableFile = fopen ("/home/saili/DBI Project Code/lineitem.tbl", "r");
 
         Record temp;
         Schema mySchema ("catalog", "lineitem");
@@ -74,18 +74,17 @@ int main () {
 	int counter = 0;
 	ComparisonEngine comp;
         while (temp.SuckNextRecord (&mySchema, tableFile) == 1) {
-		counter++;
-		if (counter % 10000 == 0) {
-			cerr << counter << "\n";
-		}
+		
+			if (counter % 10000 == 0) {
+				cerr << counter << "\n";
+			}
 
-		if (comp.Compare (&temp, &literal, &myComparison))
-                	temp.Print (&mySchema);
-
+			if (comp.Compare (&temp, &literal, &myComparison)){
+				counter++;
+				temp.Print (&mySchema);
+			}             	
         }
-
-*/
-
+        cout << "No. of records " << counter << "\n";
 }
 
 
