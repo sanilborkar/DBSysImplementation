@@ -131,7 +131,6 @@ int DBFile::GetNext (Record &fetchme, CNF &cnf, Record &literal) {
 		fileObj.GetPage(&pageObj,currentPage);				// if not then fetch the current page from the file in memory
 		pageFetched = 1;									//set pageFetched to one to indicate that a page is in memory
 	}
-	Record currRec;
 	ComparisonEngine compEng;
 	while(1){												//loop through all the records in the file until a match is found
 		if(pageObj.GetFirst(&fetchme)==0){					// check if we have already read the last record in the page
@@ -143,7 +142,7 @@ int DBFile::GetNext (Record &fetchme, CNF &cnf, Record &literal) {
 			//cout << "Current Page " << currentPage << endl;
 			pageObj.EmptyItOut();
 			fileObj.GetPage(&pageObj,currentPage);			//fetch the next page from the file
-			pageObj.GetFirst(&currRec);						//fetch the first record from the fetched page
+			pageObj.GetFirst(&fetchme);						//fetch the first record from the fetched page
 		}
 		if(compEng.Compare (&fetchme, &literal, &cnf)){		//compare the fetched record with the CNF literal
 			//cout << "Record matched\n";
