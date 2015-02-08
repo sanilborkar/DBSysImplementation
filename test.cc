@@ -5,7 +5,7 @@
 // SANIL - Modified to reflect correct path locations
 // make sure that the file path/dir information below is correct
 char *dbfile_dir = "DBFiles/"; // dir where binary heap files should be stored					// SANIL
-char *tpch_dir ="../"; // dir where dbgen tpch files (extension *.tbl) can be found
+char *tpch_dir ="../Dataset/"; // dir where dbgen tpch files (extension *.tbl) can be found
 char *catalog_path = "catalog"; // full path of the catalog file
 
 using namespace std;
@@ -39,7 +39,7 @@ void test2 () {
 	int counter = 0;
 	while (dbfile.GetNext (temp) == 1) {
 		counter += 1;
-		//temp.Print (rel->schema());
+		temp.Print (rel->schema());
 		//cout << counter << "\n";
 		if (counter % 10000 == 0) {
 			cout << counter << "\n";

@@ -15,7 +15,7 @@ extern "C" {
 extern struct AndList *final;
 
 char *dbFile_dir = "DBFiles/temp.file"; // dir where binary heap files should be stored					// SANIL
-char *tpch_dir ="../"; // dir where dbgen tpch files (extension *.tbl) can be found
+char *tpch_dir ="../Dataset/"; // dir where dbgen tpch files (extension *.tbl) can be found
 char *catalog_path = "catalog"; // full path of the catalog file
 
 
@@ -60,7 +60,7 @@ int main () {
 	myComparison.Print ();
 
 	// now open up the text file and start procesing it
-        FILE *tableFile = fopen ("/home/saili/DBI Project Code/lineitem.tbl", "r");
+        FILE *tableFile = fopen ("../Dataset/lineitem.tbl", "r");
 
         Record temp;
         Schema mySchema ("catalog", "lineitem");
@@ -81,7 +81,7 @@ int main () {
 
 			if (comp.Compare (&temp, &literal, &myComparison)){
 				counter++;
-				temp.Print (&mySchema);
+				//temp.Print (&mySchema);
 			}             	
         }
         cout << "No. of records " << counter << "\n";

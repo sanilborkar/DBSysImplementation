@@ -32,7 +32,7 @@ int DBFile::Create (char *f_path, fType f_type, void *startup) {
 	fileObj.Open (READ_FILE, f_path);
 	fileType = f_type;
 	//Saili
-	currentPage = 1;
+	currentPage = 0;
 	
 	/*if (Close() < 0) {
 		cerr << "Error while closing file" << endl;
@@ -71,14 +71,21 @@ void DBFile::Load (Schema &f_schema, char *loadpath) {
 		if (counter % 10000 == 0) {
 			cerr << counter << "\n";
 		}
+
+
+
 		// Add the fetched record to the DB File
 		Add(temp);
     }
 
+    // SANIL - Add the last non-full page to disk
+    fileObj.AddPage(&pageObj, fileObj.GetLength() - 1);
+
+    cout << endl << "Total records: " << counter << endl;
 	// Once all records have been added, write the file to disk
-	//cout << endl << fileObj.GetLength() << " pages written to file" << endl;	
+	cout << endl << fileObj.GetLength() << " pages written to file" << endl;	
 	//fileObj.Open(WRITE_FILE, dbFilePath);
-	//cout << endl << fileObj.Close() << " pages written to disk" << endl;	
+	cout << endl << fileObj.Close() << " pages written to disk" << endl;	
 
 }
 
@@ -96,7 +103,7 @@ int DBFile::Open (char *f_path) {
 void DBFile::MoveFirst () {
 	//Record temp;
 	//Saili
-	currentPage = 1;
+	currentPage = 0;
 	/*if(pageObj.GetFirst(&temp) == 0)
 		cerr << "DBFile::MoveFirst - No records on the Page" << endl;*/
 }
@@ -116,9 +123,16 @@ void DBFile::Add (Record &rec) {
 	// So, create a new page and then add the record
 	if (pageAddRes == 0) {
 		//cerr << "Page FULL - Adding Page to File.." << endl;
-		fileObj.AddPage(&pageObj, fileObj.GetLength() + 1);			// Add a new page
+		if (fileObj.GetLength() == 0)
+			fileObj.AddPage(&pageObj, fileObj.GetLength());			// Add a new page
+		else
+			fileObj.AddPage(&pageObj, fileObj.GetLength()-1);			// Add a new page
+
 		pageObj.EmptyItOut();										// Empty the pageObj's contents
+		
+		rec.Print (new Schema ("catalog", "lineitem"));
 		pageAddRes =  pageObj.Append(&rec);							// Append the current record to this new page
+
 		//Saili
 		currentPage += 1; 											// increment the current page pointer
 	}
@@ -132,17 +146,18 @@ int DBFile::GetNext (Record &fetchme) {
 		return 0;
 	}
 	if(pageFetched == 0){
+		pageObj.EmptyItOut();
 		fileObj.GetPage(&pageObj,currentPage);
 		pageFetched = 1;
 	}
 	if(pageObj.GetFirst(&fetchme)==0){
 		cout << "Page has no more records\n";
 		currentPage +=1;
-		cout << "Current Page " << currentPage << endl;
-		//return 0;
 		if((currentPage + 1) >= fileObj.GetLength ()){
 			return 0;
 		}
+		cout << "Current Page " << currentPage << endl;
+		pageObj.EmptyItOut();
 		fileObj.GetPage(&pageObj,currentPage);
 		pageObj.GetFirst(&fetchme);
 	}
@@ -153,7 +168,9 @@ int DBFile::GetNext (Record &fetchme, CNF &cnf, Record &literal) {
 	if((currentPage + 1) >= fileObj.GetLength ()){
 		return 0;
 	}
+
 	if(pageFetched == 0){
+		pageObj.EmptyItOut();
 		fileObj.GetPage(&pageObj,currentPage);
 		pageFetched = 1;
 	}
@@ -163,13 +180,13 @@ int DBFile::GetNext (Record &fetchme, CNF &cnf, Record &literal) {
 		if(pageObj.GetFirst(&fetchme)==0){
 			cout << "Page has no more records\n";
 			currentPage +=1;
-			cout << "Current Page " << currentPage << endl;
-			return 0;
-			/*if((currentPage + 1) >= fileObj.GetLength ()){
+			if((currentPage + 1) >= fileObj.GetLength ()){
 				return 0;
 			}
+			cout << "Current Page " << currentPage << endl;
+			pageObj.EmptyItOut();
 			fileObj.GetPage(&pageObj,currentPage);
-			pageObj.GetFirst(&currRec);*/
+			pageObj.GetFirst(&currRec);
 		}
 		if(compEng.Compare (&fetchme, &literal, &cnf)){
 			//fetchme = currRec;
