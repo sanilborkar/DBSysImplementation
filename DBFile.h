@@ -10,16 +10,15 @@
 
 typedef enum {heap, sorted, tree} fType;
 
-// stub DBFile header..replace it with your own DBFile.h 
-
 class DBFile {
 private:
-	// SANIL - AddFile object to be stored in DBFile instance
+	// SANIL - Add File object to be stored in DBFile instance
 	Page pageObj;
 	File fileObj;
 	int fileType;
+	//Saili - currentPage will store the page number of the page from file currently in memory
 	int currentPage;
-	int pageFetched;
+	int pageFetched;	//pageFetched is a boolean which indicates if a page is fetched in memory or not
 
 public:
 	DBFile (); 
