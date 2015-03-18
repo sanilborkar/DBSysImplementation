@@ -1,14 +1,14 @@
-#include "../DBFile.h"
+#include "../source/DBFile.h"
 #include <gtest/gtest.h>
-#include "../test.h"
+#include "../source/test.h"
 #include <stdlib.h>
 
 namespace {
 
-char *dbfile_dir = "DBFiles/lineitem.bin"; // dir where binary heap files should be stored          // SANIL
-char *tpch_dir = "../Dataset/lineitem.tbl"; // dir where tpch file is stored                         // SANIL
+char *dbfile_dir = "../source/DBFiles/lineitem.bin"; // dir where binary heap files should be stored          // SANIL
+char *tpch_dir ="/cise/tmp/dbi_sp11/DATA/10M/"; // dir where dbgen tpch files (extension *.tbl) can be found
 char *catalog_path = "catalog"; // dir where tpch file is stored                         // SANIL
-relation *rel;
+//relation *rel;
 
 // The fixture for testing class Foo.
 class Assign1_Test : public ::testing::Test {
